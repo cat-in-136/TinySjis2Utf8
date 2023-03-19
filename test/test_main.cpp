@@ -22,7 +22,7 @@ void test_sjis2utf8_ascii() {
 
 void test_sjis2utf8_fullwidth_space_punctuation() {
   const char expected[] = "　、。";
-  const uint8_t input[] = {0x81, 0x40, 0x81, 0x41, 0x81, 0x42};
+  const uint8_t input[] = {0x81, 0x40, 0x81, 0x41, 0x81, 0x42, 0x00};
 
   const auto out = sjis2utf8arduino::sjis2utf8(
       reinterpret_cast<const char *>(input), sizeof(input));
@@ -111,7 +111,7 @@ void test_sjis2utf8_cyrillic() {
 
 void test_sjis2utf8_circled_number() {
   const char expected[] = "①⑳";
-  const uint8_t input[] = {0x87, 0x40, 0x87, 0x53};
+  const uint8_t input[] = {0x87, 0x40, 0x87, 0x53, 0x00};
 
   const auto out = sjis2utf8arduino::sjis2utf8(
       reinterpret_cast<const char *>(input), sizeof(input));
@@ -122,7 +122,7 @@ void test_sjis2utf8_circled_number() {
 
 void test_sjis2utf8_roman_number() {
   const char expected[] = "①⑳";
-  const uint8_t input[] = {0x87, 0x40, 0x87, 0x53};
+  const uint8_t input[] = {0x87, 0x40, 0x87, 0x53, 0x00};
 
   const auto out = sjis2utf8arduino::sjis2utf8(
       reinterpret_cast<const char *>(input), sizeof(input));
