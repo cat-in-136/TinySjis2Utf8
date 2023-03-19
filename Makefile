@@ -2,7 +2,7 @@
 #SHELL := /bin/bash
 #PATH := /usr/local/bin:$(PATH)
 
-all: compile_commands.json
+all: compile_commands.json sjis2utf8.tbl
 	pio -f -c vim run
 
 upload:
@@ -21,10 +21,13 @@ uploadfs:
 update:
 	pio -f -c vim update
 
-test:
+test: sjis2utf8.tbl
 	pio -f -c vim test
 
 compile_commands.json:
 	pio -f -c vim run --target compiledb
+
+sjis2utf8.tbl: create_sjis2utf8tbl.py
+	python3 create_sjis2utf8tbl.py
 
 .PHONY: all upload clean program uploadfs update test

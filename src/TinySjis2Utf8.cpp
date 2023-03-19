@@ -1,4 +1,5 @@
 #include "TinySjis2Utf8.hpp"
+#include <cstdint>
 #include <cstring>
 
 static size_t append_to_char_from_unicode(const uint32_t unic,
@@ -53,8 +54,9 @@ static const struct {
     {0x8754, 0x875D, 0x2160}, // ローマ数字(機種依存文字) (Ⅰ...Ⅹ)
 };
 
-std::vector<uint8_t> tinysjis2utf8::sjis2utf8(const char *sjis_cstr,
-                                                 size_t max_sjis_len) {
+std::vector<uint8_t> tinysjis2utf8::sjis2utf8(File *tbl_file,
+                                              const char *sjis_cstr,
+                                              size_t max_sjis_len) {
   const size_t sjis_len = strnlen(sjis_cstr, max_sjis_len);
   const uint8_t *sjis = reinterpret_cast<const uint8_t *>(sjis_cstr);
 
@@ -87,11 +89,23 @@ std::vector<uint8_t> tinysjis2utf8::sjis2utf8(const char *sjis_cstr,
         }
       }
 
-      if (unicode != 0) {
-        append_to_char_from_unicode(unicode, utf8);
-      } else {
-        utf8.push_back('?'); // XXX エラー
+      static const uint16_t TBL_START_SJIS = 0x8140;
+      static const uint16_t TBL_HEADER_LEN = 0xB0;
+      if ((unicode == 0) && (TBL_START_SJIS <= c_sjis) &&
+          (tbl_file != nullptr)) {
+        if (tbl_file->seek(((c_sjis - TBL_START_SJIS) * 2 + TBL_HEADER_LEN))) {
+          uint8_t tbl_data[2];
+          if (tbl_file->read(tbl_data, sizeof(tbl_data)) == sizeof(tbl_data)) {
+            unicode = ((uint16_t)tbl_data[1] << 8) | (uint16_t)tbl_data[0];
+          }
+        }
       }
+
+      if (unicode == 0) {
+        unicode = 0xFFFD; // U+FFFD � replacement character
+      }
+
+      append_to_char_from_unicode(unicode, utf8);
     }
   }
   utf8.push_back(0);
