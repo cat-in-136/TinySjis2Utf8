@@ -1,4 +1,4 @@
-#include <Sjis2Utf8Arduino.h>
+#include <TinySjis2Utf8.h>
 #include <unity.h>
 
 #include <cstring>
@@ -14,7 +14,7 @@ void test_sjis2utf8_ascii() {
     input[i] = i + 1;
   }
 
-  const auto out = sjis2utf8arduino::sjis2utf8(input, strlen(input));
+  const auto out = tinysjis2utf8::sjis2utf8(input, strlen(input));
   const char *const out_cstr = reinterpret_cast<const char *>(out.data());
 
   TEST_ASSERT_EQUAL_STRING_LEN(input, out_cstr, strlen(input));
@@ -26,7 +26,7 @@ void test_sjis2utf8_halfwidth_katakana() {
                            0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF, 0xB0,
                            0xB1, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF, 0x00};
 
-  const auto out = sjis2utf8arduino::sjis2utf8(
+  const auto out = tinysjis2utf8::sjis2utf8(
       reinterpret_cast<const char *>(input), sizeof(input));
   const char *const out_cstr = reinterpret_cast<const char *>(out.data());
 
@@ -37,7 +37,7 @@ void test_sjis2utf8_fullwidth_space_punctuation() {
   const char expected[] = "　、。";
   const uint8_t input[] = {0x81, 0x40, 0x81, 0x41, 0x81, 0x42, 0x00};
 
-  const auto out = sjis2utf8arduino::sjis2utf8(
+  const auto out = tinysjis2utf8::sjis2utf8(
       reinterpret_cast<const char *>(input), sizeof(input));
   const char *const out_cstr = reinterpret_cast<const char *>(out.data());
 
@@ -51,7 +51,7 @@ void test_sjis2utf8_fullwidth_digit() {
       0x54, 0x82, 0x55, 0x82, 0x56, 0x82, 0x57, 0x82, 0x58, 0x00,
   };
 
-  const auto out = sjis2utf8arduino::sjis2utf8(
+  const auto out = tinysjis2utf8::sjis2utf8(
       reinterpret_cast<const char *>(input), sizeof(input));
   const char *const out_cstr = reinterpret_cast<const char *>(out.data());
 
@@ -64,7 +64,7 @@ void test_sjis2utf8_fullwidth_latin() {
       0x82, 0x60, 0x82, 0x79, 0x82, 0x81, 0x82, 0x9A, 0x00,
   };
 
-  const auto out = sjis2utf8arduino::sjis2utf8(
+  const auto out = tinysjis2utf8::sjis2utf8(
       reinterpret_cast<const char *>(input), sizeof(input));
   const char *const out_cstr = reinterpret_cast<const char *>(out.data());
 
@@ -76,7 +76,7 @@ void test_sjis2utf8_hiragana() {
   const uint8_t input[] = {0x82, 0x9F, 0x82, 0xA0, 0x82, 0xA1,
                            0x82, 0xF0, 0x82, 0xF1, 0x00};
 
-  const auto out = sjis2utf8arduino::sjis2utf8(
+  const auto out = tinysjis2utf8::sjis2utf8(
       reinterpret_cast<const char *>(input), sizeof(input));
   const char *const out_cstr = reinterpret_cast<const char *>(out.data());
 
@@ -90,7 +90,7 @@ void test_sjis2utf8_katakana() {
       0x83, 0x93, 0x83, 0x94, 0x83, 0x95, 0x83, 0x96, 0x00,
   };
 
-  const auto out = sjis2utf8arduino::sjis2utf8(
+  const auto out = tinysjis2utf8::sjis2utf8(
       reinterpret_cast<const char *>(input), sizeof(input));
   const char *const out_cstr = reinterpret_cast<const char *>(out.data());
 
@@ -102,7 +102,7 @@ void test_sjis2utf8_greek() {
   const uint8_t input[] = {0x83, 0x9F, 0x83, 0xAF, 0x83, 0xB0, 0x83, 0xB6, 0x83,
                            0xBF, 0x83, 0xCF, 0x83, 0xD0, 0x83, 0xD6, 0x00};
 
-  const auto out = sjis2utf8arduino::sjis2utf8(
+  const auto out = tinysjis2utf8::sjis2utf8(
       reinterpret_cast<const char *>(input), sizeof(input));
   const char *const out_cstr = reinterpret_cast<const char *>(out.data());
 
@@ -115,7 +115,7 @@ void test_sjis2utf8_cyrillic() {
                            0x60, 0x84, 0x70, 0x84, 0x75, 0x84, 0x76, 0x84, 0x77,
                            0x84, 0x7E, 0x84, 0x80, 0x84, 0x91, 0x00};
 
-  const auto out = sjis2utf8arduino::sjis2utf8(
+  const auto out = tinysjis2utf8::sjis2utf8(
       reinterpret_cast<const char *>(input), sizeof(input));
   const char *const out_cstr = reinterpret_cast<const char *>(out.data());
 
@@ -126,7 +126,7 @@ void test_sjis2utf8_circled_number() {
   const char expected[] = "①⑳";
   const uint8_t input[] = {0x87, 0x40, 0x87, 0x53, 0x00};
 
-  const auto out = sjis2utf8arduino::sjis2utf8(
+  const auto out = tinysjis2utf8::sjis2utf8(
       reinterpret_cast<const char *>(input), sizeof(input));
   const char *const out_cstr = reinterpret_cast<const char *>(out.data());
 
@@ -137,7 +137,7 @@ void test_sjis2utf8_roman_number() {
   const char expected[] = "①⑳";
   const uint8_t input[] = {0x87, 0x40, 0x87, 0x53, 0x00};
 
-  const auto out = sjis2utf8arduino::sjis2utf8(
+  const auto out = tinysjis2utf8::sjis2utf8(
       reinterpret_cast<const char *>(input), sizeof(input));
   const char *const out_cstr = reinterpret_cast<const char *>(out.data());
 

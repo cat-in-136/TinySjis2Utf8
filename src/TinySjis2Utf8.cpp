@@ -1,4 +1,4 @@
-#include "Sjis2Utf8Arduino.hpp"
+#include "TinySjis2Utf8.hpp"
 #include <cstring>
 
 static size_t append_to_char_from_unicode(const uint32_t unic,
@@ -53,7 +53,7 @@ static const struct {
     {0x8754, 0x875D, 0x2160}, // ローマ数字(機種依存文字) (Ⅰ...Ⅹ)
 };
 
-std::vector<uint8_t> sjis2utf8arduino::sjis2utf8(const char *sjis_cstr,
+std::vector<uint8_t> tinysjis2utf8::sjis2utf8(const char *sjis_cstr,
                                                  size_t max_sjis_len) {
   const size_t sjis_len = strnlen(sjis_cstr, max_sjis_len);
   const uint8_t *sjis = reinterpret_cast<const uint8_t *>(sjis_cstr);

@@ -1,12 +1,12 @@
 {
-  "name": "Sjis2Utf8Arduino",
+  "name": "TinySjis2Utf8",
   "version": "0.0.0",
-  "description": "ShiftJIS-to-UTF8 convert library for Arduino",
+  "description": "Tiny ShiftJIS-to-UTF8 convert library",
   "keywords": "arduino",
   "repository":
   {
     "type": "git",
-    "url": "https://github.com/cat-in-136/Sjis2Utf8Arduino.git"
+    "url": "https://github.com/cat-in-136/TinySjis2Utf8.git"
   },
   "authors":
   [
@@ -17,7 +17,7 @@
     }
   ],
   "license": "MIT",
-  "homepage": "https://github.com/cat-in-136/Sjis2Utf8Arduino",
+  "homepage": "https://github.com/cat-in-136/TinySjis2Utf8",
   "dependencies": {
   },
   "frameworks": "*",
