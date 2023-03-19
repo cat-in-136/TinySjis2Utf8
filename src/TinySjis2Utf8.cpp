@@ -54,6 +54,9 @@ static const struct {
     {0x8754, 0x875D, 0x2160}, // ローマ数字(機種依存文字) (Ⅰ...Ⅹ)
 };
 
+static const uint32_t UNICODE_REPLACEMENT_CHARACTER =
+    0xFFFD; // U+FFFD replacement character
+
 std::vector<uint8_t> tinysjis2utf8::sjis2utf8(File *tbl_file,
                                               const char *sjis_cstr,
                                               size_t max_sjis_len) {
@@ -76,7 +79,7 @@ std::vector<uint8_t> tinysjis2utf8::sjis2utf8(File *tbl_file,
       append_to_char_from_unicode(unicode, utf8);
     } else {
       if (sjis_p + 1 >= sjis_len) {
-        utf8.push_back('?'); // XXX エラー
+        append_to_char_from_unicode(UNICODE_REPLACEMENT_CHARACTER, utf8);
         break;
       }
 
@@ -102,7 +105,7 @@ std::vector<uint8_t> tinysjis2utf8::sjis2utf8(File *tbl_file,
       }
 
       if (unicode == 0) {
-        unicode = 0xFFFD; // U+FFFD � replacement character
+        unicode = UNICODE_REPLACEMENT_CHARACTER;
       }
 
       append_to_char_from_unicode(unicode, utf8);

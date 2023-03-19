@@ -33,6 +33,19 @@ void test_sjis2utf8_halfwidth_katakana() {
   TEST_ASSERT_EQUAL_STRING_LEN(expected, out_cstr, strlen(expected));
 }
 
+void test_sjis2utf8_truncated_input_shall_generate_replacement_character() {
+  const uint8_t expected[] = {0xEF, 0xBF, 0xBD, 0x00};
+  const uint8_t input[] = {0x81, 0x00};
+
+  const char *const expected_cstr = reinterpret_cast<const char *>(expected);
+
+  const auto out = tinysjis2utf8::sjis2utf8(
+      nullptr, reinterpret_cast<const char *>(input), sizeof(input));
+  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+
+  TEST_ASSERT_EQUAL_STRING_LEN(expected_cstr, out_cstr, strlen(expected_cstr));
+}
+
 void test_sjis2utf8_fullwidth_space_punctuation() {
   const char expected[] = "　、。";
   const uint8_t input[] = {0x81, 0x40, 0x81, 0x41, 0x81, 0x42, 0x00};
@@ -159,6 +172,21 @@ void test_sjis2utf8_kanji_tbl() {
   TEST_ASSERT_EQUAL_STRING_LEN(expected, out_cstr, strlen(expected));
 }
 
+void test_sjis2utf8_undefined_char_to_replacement_character() {
+  tinysjis2utf8::MockFileRead tbl_file("sjis2utf8.tbl");
+
+  const uint8_t expected[] = {0xEF, 0xBF, 0xBD, 0x00};
+  const uint8_t input[] = {0x88, 0x9E, 0x00};
+
+  const char *const expected_cstr = reinterpret_cast<const char *>(expected);
+
+  const auto out = tinysjis2utf8::sjis2utf8(
+      &tbl_file, reinterpret_cast<const char *>(input), sizeof(input));
+  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+
+  TEST_ASSERT_EQUAL_STRING_LEN(expected_cstr, out_cstr, strlen(expected_cstr));
+}
+
 #ifdef ARDUINO
 void setup() {
   delay(2000); // add 2-sec wait for the board w/o software resetting via
@@ -169,6 +197,7 @@ int main(int argc, char *argv[]) {
   UNITY_BEGIN();
   RUN_TEST(test_sjis2utf8_ascii);
   RUN_TEST(test_sjis2utf8_halfwidth_katakana);
+  RUN_TEST(test_sjis2utf8_truncated_input_shall_generate_replacement_character);
   RUN_TEST(test_sjis2utf8_fullwidth_space_punctuation);
   RUN_TEST(test_sjis2utf8_fullwidth_digit);
   RUN_TEST(test_sjis2utf8_fullwidth_latin);
@@ -179,6 +208,7 @@ int main(int argc, char *argv[]) {
   RUN_TEST(test_sjis2utf8_circled_number);
   RUN_TEST(test_sjis2utf8_roman_number);
   RUN_TEST(test_sjis2utf8_kanji_tbl);
+  RUN_TEST(test_sjis2utf8_undefined_char_to_replacement_character);
   UNITY_END();
 
 #ifndef ARDUINO
