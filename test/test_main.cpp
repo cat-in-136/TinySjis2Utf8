@@ -20,6 +20,19 @@ void test_sjis2utf8_ascii() {
   TEST_ASSERT_EQUAL_STRING_LEN(input, out_cstr, strlen(input));
 }
 
+void test_sjis2utf8_halfwidth_katakana() {
+  const char expected[] = "｡｢｣､･ｦｧｨｩｪｫｬｭｮｯｰｱﾛﾜﾝﾞﾟ";
+  const uint8_t input[] = {0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xA8,
+                           0xA9, 0xAA, 0xAB, 0xAC, 0xAD, 0xAE, 0xAF, 0xB0,
+                           0xB1, 0xDB, 0xDC, 0xDD, 0xDE, 0xDF, 0x00};
+
+  const auto out = sjis2utf8arduino::sjis2utf8(
+      reinterpret_cast<const char *>(input), sizeof(input));
+  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+
+  TEST_ASSERT_EQUAL_STRING_LEN(expected, out_cstr, strlen(expected));
+}
+
 void test_sjis2utf8_fullwidth_space_punctuation() {
   const char expected[] = "　、。";
   const uint8_t input[] = {0x81, 0x40, 0x81, 0x41, 0x81, 0x42, 0x00};
@@ -140,6 +153,7 @@ int main(int argc, char *argv[]) {
 #endif
   UNITY_BEGIN();
   RUN_TEST(test_sjis2utf8_ascii);
+  RUN_TEST(test_sjis2utf8_halfwidth_katakana);
   RUN_TEST(test_sjis2utf8_fullwidth_space_punctuation);
   RUN_TEST(test_sjis2utf8_fullwidth_digit);
   RUN_TEST(test_sjis2utf8_fullwidth_latin);

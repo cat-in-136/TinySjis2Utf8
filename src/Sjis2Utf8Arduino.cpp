@@ -68,9 +68,10 @@ std::vector<uint8_t> sjis2utf8arduino::sjis2utf8(const char *sjis_cstr,
       break;
     } else if ((c & 0xF0) <= 0x70) {
       utf8.push_back(c);
-    } else if (((0xF0 & c) == 0xA0) || ((0xF0 & c) == 0xB0) ||
-               ((0xF0 & c) == 0xC0) || ((0xF0 & c) == 0xD0)) {
-      utf8.push_back('_'); // TODO 半角カナと半角記号
+    } else if ((0xA1 <= c) && (c <= 0xDF)) {
+      // 半角カナ・半角カナ記号
+      const uint32_t unicode = 0xFF61 + (c - 0xA1);
+      append_to_char_from_unicode(unicode, utf8);
     } else {
       if (sjis_p + 1 >= sjis_len) {
         utf8.push_back('?'); // XXX エラー
