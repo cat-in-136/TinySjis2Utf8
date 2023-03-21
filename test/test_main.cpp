@@ -15,7 +15,7 @@ void test_sjis2utf8_ascii() {
   }
 
   const auto out = tinysjis2utf8::sjis2utf8(nullptr, input, strlen(input));
-  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+  const char *const out_cstr = out.c_str();
 
   TEST_ASSERT_EQUAL_STRING_LEN(input, out_cstr, strlen(input));
 }
@@ -28,7 +28,7 @@ void test_sjis2utf8_halfwidth_katakana() {
 
   const auto out = tinysjis2utf8::sjis2utf8(
       nullptr, reinterpret_cast<const char *>(input), sizeof(input));
-  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+  const char *const out_cstr = out.c_str();
 
   TEST_ASSERT_EQUAL_STRING_LEN(expected, out_cstr, strlen(expected));
 }
@@ -41,7 +41,7 @@ void test_sjis2utf8_truncated_input_shall_generate_replacement_character() {
 
   const auto out = tinysjis2utf8::sjis2utf8(
       nullptr, reinterpret_cast<const char *>(input), sizeof(input));
-  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+  const char *const out_cstr = out.c_str();
 
   TEST_ASSERT_EQUAL_STRING_LEN(expected_cstr, out_cstr, strlen(expected_cstr));
 }
@@ -52,7 +52,7 @@ void test_sjis2utf8_fullwidth_space_punctuation() {
 
   const auto out = tinysjis2utf8::sjis2utf8(
       nullptr, reinterpret_cast<const char *>(input), sizeof(input));
-  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+  const char *const out_cstr = out.c_str();
 
   TEST_ASSERT_EQUAL_STRING_LEN(expected, out_cstr, strlen(expected));
 }
@@ -66,7 +66,7 @@ void test_sjis2utf8_fullwidth_digit() {
 
   const auto out = tinysjis2utf8::sjis2utf8(
       nullptr, reinterpret_cast<const char *>(input), sizeof(input));
-  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+  const char *const out_cstr = out.c_str();
 
   TEST_ASSERT_EQUAL_STRING_LEN(expected, out_cstr, strlen(expected));
 }
@@ -79,7 +79,7 @@ void test_sjis2utf8_fullwidth_latin() {
 
   const auto out = tinysjis2utf8::sjis2utf8(
       nullptr, reinterpret_cast<const char *>(input), sizeof(input));
-  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+  const char *const out_cstr = out.c_str();
 
   TEST_ASSERT_EQUAL_STRING_LEN(expected, out_cstr, strlen(expected));
 }
@@ -91,7 +91,7 @@ void test_sjis2utf8_hiragana() {
 
   const auto out = tinysjis2utf8::sjis2utf8(
       nullptr, reinterpret_cast<const char *>(input), sizeof(input));
-  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+  const char *const out_cstr = out.c_str();
 
   TEST_ASSERT_EQUAL_STRING_LEN(expected, out_cstr, strlen(expected));
 }
@@ -105,7 +105,7 @@ void test_sjis2utf8_katakana() {
 
   const auto out = tinysjis2utf8::sjis2utf8(
       nullptr, reinterpret_cast<const char *>(input), sizeof(input));
-  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+  const char *const out_cstr = out.c_str();
 
   TEST_ASSERT_EQUAL_STRING_LEN(expected, out_cstr, strlen(expected));
 }
@@ -117,7 +117,7 @@ void test_sjis2utf8_greek() {
 
   const auto out = tinysjis2utf8::sjis2utf8(
       nullptr, reinterpret_cast<const char *>(input), sizeof(input));
-  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+  const char *const out_cstr = out.c_str();
 
   TEST_ASSERT_EQUAL_STRING_LEN(expected, out_cstr, strlen(expected));
 }
@@ -130,7 +130,7 @@ void test_sjis2utf8_cyrillic() {
 
   const auto out = tinysjis2utf8::sjis2utf8(
       nullptr, reinterpret_cast<const char *>(input), sizeof(input));
-  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+  const char *const out_cstr = out.c_str();
 
   TEST_ASSERT_EQUAL_STRING_LEN(expected, out_cstr, strlen(expected));
 }
@@ -141,7 +141,7 @@ void test_sjis2utf8_circled_number() {
 
   const auto out = tinysjis2utf8::sjis2utf8(
       nullptr, reinterpret_cast<const char *>(input), sizeof(input));
-  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+  const char *const out_cstr = out.c_str();
 
   TEST_ASSERT_EQUAL_STRING_LEN(expected, out_cstr, strlen(expected));
 }
@@ -152,7 +152,7 @@ void test_sjis2utf8_roman_number() {
 
   const auto out = tinysjis2utf8::sjis2utf8(
       nullptr, reinterpret_cast<const char *>(input), sizeof(input));
-  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+  const char *const out_cstr = out.c_str();
 
   TEST_ASSERT_EQUAL_STRING_LEN(expected, out_cstr, strlen(expected));
 }
@@ -167,7 +167,7 @@ void test_sjis2utf8_kanji_tbl() {
 
   const auto out = tinysjis2utf8::sjis2utf8(
       &tbl_file, reinterpret_cast<const char *>(input), sizeof(input));
-  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+  const char *const out_cstr = out.c_str();
 
   TEST_ASSERT_EQUAL_STRING_LEN(expected, out_cstr, strlen(expected));
 }
@@ -182,7 +182,7 @@ void test_sjis2utf8_undefined_char_to_replacement_character() {
 
   const auto out = tinysjis2utf8::sjis2utf8(
       &tbl_file, reinterpret_cast<const char *>(input), sizeof(input));
-  const char *const out_cstr = reinterpret_cast<const char *>(out.data());
+  const char *const out_cstr = out.c_str();
 
   TEST_ASSERT_EQUAL_STRING_LEN(expected_cstr, out_cstr, strlen(expected_cstr));
 }

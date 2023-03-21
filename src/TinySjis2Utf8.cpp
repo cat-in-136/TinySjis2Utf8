@@ -3,24 +3,24 @@
 #include <cstring>
 
 static size_t append_to_char_from_unicode(const uint32_t unic,
-                                          std::vector<uint8_t> &out) {
+                                          std::string &out) {
   if (unic < 128) {
-    out.push_back(unic);
+    out += (unic);
     return 1;
   } else if (unic < 2048) {
-    out.push_back(0xC0 | (unic >> 6));
-    out.push_back(0x80 | (unic & 0x3F));
+    out += (0xC0 | (unic >> 6));
+    out += (0x80 | (unic & 0x3F));
     return 2;
   } else if (unic < 65536) {
-    out.push_back(0xE0 | (unic >> 12));
-    out.push_back(0x80 | ((unic >> 6) & 0x3F));
-    out.push_back(0x80 | (unic & 0x3F));
+    out += (0xE0 | (unic >> 12));
+    out += (0x80 | ((unic >> 6) & 0x3F));
+    out += (0x80 | (unic & 0x3F));
     return 3;
   } else if (unic < 0x110000) {
-    out.push_back(0xF0 | (unic >> 18));
-    out.push_back(0x80 | ((unic >> 12) & 0x3F));
-    out.push_back(0x80 | ((unic >> 6) & 0x3F));
-    out.push_back(0x80 | (unic & 0x3F));
+    out += (0xF0 | (unic >> 18));
+    out += (0x80 | ((unic >> 12) & 0x3F));
+    out += (0x80 | ((unic >> 6) & 0x3F));
+    out += (0x80 | (unic & 0x3F));
     return 4;
   } else {
     return 0;
@@ -57,13 +57,12 @@ static const struct {
 static const uint32_t UNICODE_REPLACEMENT_CHARACTER =
     0xFFFD; // U+FFFD replacement character
 
-std::vector<uint8_t> tinysjis2utf8::sjis2utf8(File *tbl_file,
-                                              const char *sjis_cstr,
-                                              size_t max_sjis_len) {
+std::string tinysjis2utf8::sjis2utf8(File *tbl_file, const char *sjis_cstr,
+                                     size_t max_sjis_len) {
   const size_t sjis_len = strnlen(sjis_cstr, max_sjis_len);
   const uint8_t *sjis = reinterpret_cast<const uint8_t *>(sjis_cstr);
 
-  std::vector<uint8_t> utf8;
+  std::string utf8;
   utf8.reserve(sjis_len * 3 + 1);
 
   for (size_t sjis_p = 0; sjis_p < sjis_len; sjis_p++) {
@@ -72,7 +71,7 @@ std::vector<uint8_t> tinysjis2utf8::sjis2utf8(File *tbl_file,
     if (c == 0) {
       break;
     } else if ((c & 0xF0) <= 0x70) {
-      utf8.push_back(c);
+      utf8 += c;
     } else if ((0xA1 <= c) && (c <= 0xDF)) {
       // 半角カナ・半角カナ記号
       const uint32_t unicode = 0xFF61 + (c - 0xA1);
@@ -111,7 +110,7 @@ std::vector<uint8_t> tinysjis2utf8::sjis2utf8(File *tbl_file,
       append_to_char_from_unicode(unicode, utf8);
     }
   }
-  utf8.push_back(0);
+  utf8 += '\0';
 
   return utf8;
 }

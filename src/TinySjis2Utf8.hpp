@@ -1,6 +1,6 @@
 #include <cstddef>
 #include <cstdint>
-#include <vector>
+#include <string>
 
 #if defined(ESP32) || defined(ESP8266)
 #include <FS.h>
@@ -56,7 +56,7 @@ typedef MockFileRead File;
 typedef ::File File;
 #endif
 
-std::vector<uint8_t> sjis2utf8(File *tbl_file, const char *sjis_cstr,
-                               size_t max_sjis_len);
+std::string sjis2utf8(File *tbl_file, const char *sjis_cstr,
+                      size_t max_sjis_len);
 
 } // namespace tinysjis2utf8
