@@ -1,6 +1,11 @@
 #include <cstddef>
 #include <cstdint>
+
+#ifdef ARDUINO
+#include <Arduino.h>
+#else
 #include <string>
+#endif
 
 #if defined(ESP32) || defined(ESP8266)
 #include <FS.h>
@@ -56,7 +61,12 @@ typedef MockFileRead File;
 typedef ::File File;
 #endif
 
-std::string sjis2utf8(File *tbl_file, const char *sjis_cstr,
-                      size_t max_sjis_len);
+#ifdef ARDUINO
+typedef ::String String;
+#else
+typedef std::string String;
+#endif
+
+String sjis2utf8(File *tbl_file, const char *sjis_cstr, size_t max_sjis_len);
 
 } // namespace tinysjis2utf8
